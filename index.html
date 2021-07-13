@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    body{
+      height: 100vh;
+      width: 100%;
+      background: rgb(221, 34, 71);
+      overflow-x: hidden;
+    }
+    .main{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+    }
+    a{
+      text-decoration: none;
+      color: crimson;
+      font-size: 2rem;
+    }
+    .about{
+      background-color: black;
+      height: 100%;
+      color: #fff;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      width: 50%;
+    }
+    .about img{
+      border-radius: 50%;
+      border: 4px solid red;
+      width: 300px;
+      height: 300px;
+    }
+    .intro h1{
+      font-size: 3rem;
+      font-weight: bold;
+      font-family: tahoma ;
+      color: #fff;
+    }
+    .intro p, .intro h5{
+      font-size: 1.5rem;
+      color: rgb(216, 187, 187);
+    }
+    .repos{
+      width: 50%;
+    }
+    .repos .repos-content{
+      margin: 0 auto;
+      width: fit-content;
+      border: none;
+      background: rgba(0,0,0, 0.2);
+      border-radius: 10px ;
+    }
+    .repos h2{
+      font-size: 3rem;
+      color: #111;
+      padding: 10px;
+    }
+    .repos .repos-list{
+      color: #fff;
+      list-style: none;
+    }
+    .repos ul li{
+      padding: 10px;
+      margin-bottom: 20px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .repos ul li span{
+      font-size: 2rem;
+      color: silver;
+      padding: 0px 10px;
+    }
+    @media(max-width:1040px){
+    .body{
+      height: auto;
+      overflow-x: hidden;
+    }
+    .main{
+      flex-direction: column;
+    }
+    a{
+      text-decoration: none;
+      color: crimson;
+      font-size: 2rem;
+    }
+    .about{
+      height: auto;
+      justify-content: space-between;
+      width: 100%;
+      padding: 100px;
+    }
+    .about img{
+      width: 150px;
+      height: 150px;
+    }
+    .intro h1{
+      font-size: 2rem;
+    }
+    .intro p, .intro h5{
+      font-size: 1rem;
+    }
+    .repos{
+      width: auto;
+      padding: 100px;
+    }
+    .repos .repos-content{
+      margin: 0 auto;
+      width: fit-content;
+    }
+    .repos h2{
+      font-size: 2rem;
+    }
+    .repos ul li span{
+      font-size: 1.5rem;
+    }
+  </style>
+  <title>myportfolio</title>
+</head>
+<body>
+
+  <div class="main" id="main">
+    <div class="about">
+      <img src="" alt="" height="300px" width="300px" id="pp">
+      <div class="intro">
+        <h1 id="fullname"></h1>
+        <p id="bio"></p>
+        <h5 id="followers"></h5>
+        <p>Check me on <a id="github-link">Github</a></p>
+      </div>      
+    </div>
+
+    <div id="repos" class="repos">
+      <div  id="repo" class="repos-content">
+        <h2>List of My Repositories</h2>
+        <ul class="repos-list" id="repos-list"></ul>
+      </div> 
+    </div>
+  </div>  
+  <script>
+    fetch("https://api.github.com/users/sushantbudhathoki")
+    .then(response => response.json())
+    .then(function(data){
+      console.log(data)
+      document.getElementById("pp").src = data["avatar_url"]
+      document.getElementById("fullname").textContent = data["name"]
+      document.getElementById("bio").textContent = data["bio"]
+      document.getElementById("followers").textContent = `I have been followed by ${data[followers]} people on github`
+      document.getElementById("github-link").href = data["html_url"]
+      document.getElementById("github-link").target = "blank"
+    })
+
+    fetch("https://api.github.com/users/sushantbudhathoki/repos")
+    .then(response => response.json())
+    .then(function(data){
+
+      console.log(data)
+      data.forEach(element => {
+        const repoEl = document.createElement('li')
+    repoEl.innerHTML = `
+        <span>${element.name}</span> Repository date:${element.updated_at}
+      `
+
+      document.getElementById('repos-list').appendChild(repoEl)
+      });
+    })
+ 
+  </script>
+</body>
+</html>
